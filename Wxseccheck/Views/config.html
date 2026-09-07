@@ -1,0 +1,277 @@
+{template "header.html"}
+
+<form action="" class="form-horizontal" id="myform" method="post" name="myform" enctype="multipart/form-data">
+    {$form}
+    <div class="portlet bordered light myfbody">
+        <div class="portlet-title tabbable-line">
+            <ul class="nav nav-tabs" style="float:left;">
+                <li class="{if $page==0}active{/if}">
+                    <a data-toggle="tab" href="#tab_0" onclick="$('#dr_page').val('0')"> <i class="fa fa-cog"></i>
+                        {dr_lang('插件设置')} </a>
+                </li>
+                <li class="{if $page==1}active{/if}">
+                    <a data-toggle="tab" href="#tab_1" onclick="$('#dr_page').val('1')"> <i class="fa fa-flask"></i>
+                        {dr_lang('接口测试')} </a>
+                </li>
+            </ul>
+        </div>
+        <div class="portlet-body">
+            <div class="tab-content">
+                <div class="tab-pane {if $page==0}active{/if}" id="tab_0">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('启用文本检测')}</label>
+                            <div class="col-md-9">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[use]" type="radio" value="1"
+                                               {if $data.use=='1'}checked{/if}> {dr_lang('开启')}
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[use]" type="radio" value="0"
+                                               {if $data.use!='1'}checked{/if}> {dr_lang('关闭')}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <span class="help-block">{dr_lang('挂钩 module_content_before，在模块内容入库前调用微信 msgSecCheck')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('启用图片检测')}</label>
+                            <div class="col-md-9">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[use_image]" type="radio" value="1"
+                                               {if $data.use_image=='1'}checked{/if}> {dr_lang('开启')}
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[use_image]" type="radio" value="0"
+                                               {if $data.use_image!='1'}checked{/if}> {dr_lang('关闭')}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <span class="help-block">{dr_lang('挂钩 upload_file，上传图片后调用微信 imgSecCheck；兼容站点 5M 上传，送检前自动缩至 750×1334 并压到微信 1M（原图不改）')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('检测模块')}</label>
+                            <div class="col-md-9">
+                                <input class="form-control" name="data[modules]" type="text"
+                                       value="{$data.modules}" placeholder="{dr_lang('留空=全部模块')}">
+                                <span class="help-block">{dr_lang('模块目录名，多个用逗号分隔；留空表示全部模块（默认）')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('检测字段')}</label>
+                            <div class="col-md-9">
+                                <input class="form-control" name="data[fields]" type="text"
+                                       value="{$data.fields}"
+                                       placeholder="{dr_lang('留空=全部字段')}">
+                                <span class="help-block">{dr_lang('参与拼接检测的字段名，逗号分隔；留空表示提交数据中的全部字段（默认）')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('场景值 scene')}</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="data[scene]">
+                                    <option value="1" {if $data.scene=='1'}selected{/if}>1 {dr_lang('资料')}</option>
+                                    <option value="2" {if $data.scene=='2'}selected{/if}>2 {dr_lang('评论')}</option>
+                                    <option value="3" {if $data.scene=='3'}selected{/if}>3 {dr_lang('论坛')}（{dr_lang('推荐')}）</option>
+                                    <option value="4" {if $data.scene=='4'}selected{/if}>4 {dr_lang('社交日志')}</option>
+                                </select>
+                                <span class="help-block">{dr_lang('msgSecCheck 2.0 场景枚举；UGC 发布建议选论坛')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('小程序 AppID')}</label>
+                            <div class="col-md-9">
+                                <input class="form-control" name="data[xcx_appid]" type="text"
+                                       value="{$data.xcx_appid}" required>
+                                <span class="help-block">{dr_lang('必填：须与当前小程序一致，保存时校验')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('小程序 AppSecret')}</label>
+                            <div class="col-md-9">
+                                <input class="form-control" name="data[xcx_secret]" type="text"
+                                       value="{$data.xcx_secret}" required>
+                                <span class="help-block">{dr_lang('必填：不读取微信插件配置')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('接口异常放行')}</label>
+                            <div class="col-md-9">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[fail_open]" type="radio" value="0"
+                                               {if $data.fail_open!='1'}checked{/if}> {dr_lang('否（推荐）')}
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[fail_open]" type="radio" value="1"
+                                               {if $data.fail_open=='1'}checked{/if}> {dr_lang('是')}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <span class="help-block">{dr_lang('仅影响网络/凭证类失败；内容违规始终拦截，提示「所发布内容含违规信息」')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('后台发布跳过')}</label>
+                            <div class="col-md-9">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[skip_admin]" type="radio" value="0"
+                                               {if $data.skip_admin!='1'}checked{/if}> {dr_lang('否')}
+                                        <span></span>
+                                    </label>
+                                    <label class="mt-radio mt-radio-outline">
+                                        <input name="data[skip_admin]" type="radio" value="1"
+                                               {if $data.skip_admin=='1'}checked{/if}> {dr_lang('是')}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <span class="help-block">{dr_lang('开启后仅会员端/小程序发布与上传检测，后台录入/上传不检测')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane {if $page==1}active{/if}" id="tab_1">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('凭证检测')}</label>
+                            <div class="col-md-9">
+                                <button class="btn blue" type="button" onclick="dr_test_token()">
+                                    <i class="fa fa-key"></i> {dr_lang('获取 access_token')}
+                                </button>
+                                <span class="help-block" id="dr_token_msg">{dr_lang('用于确认 AppID/AppSecret 配置正确')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('测试文本')}</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="dr_test_content" rows="4"
+                                          placeholder="{dr_lang('输入一段文本后点击检测')}"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-9">
+                                <button class="btn green" type="button" onclick="dr_test_text()">
+                                    <i class="fa fa-check"></i> {dr_lang('执行 msgSecCheck')}
+                                </button>
+                                <span class="help-block" id="dr_test_msg"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{dr_lang('测试图片')}</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="dr_test_image" type="file"
+                                       accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,.jpg,.jpeg,.png,.gif,.webp,.bmp">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-9">
+                                <button class="btn green" type="button" onclick="dr_test_image()">
+                                    <i class="fa fa-image"></i> {dr_lang('执行 imgSecCheck')}
+                                </button>
+                                <span class="help-block" id="dr_test_image_msg"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button class="btn green"
+                        onclick="dr_ajax_submit('{dr_now_url()}&page='+$('#dr_page').val(), 'myform', '2000')"
+                        type="button"><i class="fa fa-save"></i> {dr_lang('保存')}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function dr_test_token() {
+        $('#dr_token_msg').html('...');
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "{dr_url('wxseccheck/config/token_index')}",
+            success: function (json) {
+                if (json.code) {
+                    $('#dr_token_msg').html('<span class="text-success">' + json.msg + '</span>');
+                } else {
+                    $('#dr_token_msg').html('<span class="text-danger">' + json.msg + '</span>');
+                }
+            },
+            error: function (HttpRequest, ajaxOptions, thrownError) {
+                dr_ajax_alert_error(HttpRequest, this, thrownError);
+            }
+        });
+    }
+
+    function dr_test_text() {
+        var content = $('#dr_test_content').val() || '';
+        $('#dr_test_msg').html('...');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "{dr_url('wxseccheck/config/test_index')}",
+            data: $('#myform').serialize() + '&content=' + encodeURIComponent(content),
+            success: function (json) {
+                if (json.code) {
+                    $('#dr_test_msg').html('<span class="text-success">' + json.msg + '</span>');
+                } else {
+                    $('#dr_test_msg').html('<span class="text-danger">' + json.msg + '</span>');
+                }
+            },
+            error: function (HttpRequest, ajaxOptions, thrownError) {
+                dr_ajax_alert_error(HttpRequest, this, thrownError);
+            }
+        });
+    }
+
+    function dr_test_image() {
+        var input = document.getElementById('dr_test_image');
+        if (!input || !input.files || !input.files.length) {
+            $('#dr_test_image_msg').html('<span class="text-danger">{dr_lang("请选择要检测的图片")}</span>');
+            return;
+        }
+        // 必须带上表单隐藏域（含 csrf_token），否则 CSRF 会拦截 POST
+        var fd = new FormData();
+        var formArr = $('#myform').serializeArray();
+        for (var i = 0; i < formArr.length; i++) {
+            fd.append(formArr[i].name, formArr[i].value);
+        }
+        fd.append('image', input.files[0]);
+        $('#dr_test_image_msg').html('...');
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "{dr_url('wxseccheck/config/test_image_index')}&token={dr_get_csrf_token()}",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (json) {
+                if (json.code) {
+                    $('#dr_test_image_msg').html('<span class="text-success">' + json.msg + '</span>');
+                } else {
+                    $('#dr_test_image_msg').html('<span class="text-danger">' + json.msg + '</span>');
+                }
+            },
+            error: function (HttpRequest, ajaxOptions, thrownError) {
+                dr_ajax_alert_error(HttpRequest, this, thrownError);
+            }
+        });
+    }
+</script>
+
+{template "footer.html"}

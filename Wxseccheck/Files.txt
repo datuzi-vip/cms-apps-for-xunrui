@@ -1,0 +1,1 @@
+,/APPSPATH/Wxseccheck/Models/Seccheck.php,/APPSPATH/Wxseccheck/Views/config.html,/APPSPATH/Wxseccheck/Controllers/Admin/Config.php,/APPSPATH/Wxseccheck/Config/Routes.php,/APPSPATH/Wxseccheck/Config/Menu.php,/APPSPATH/Wxseccheck/Config/Hooks.php,/APPSPATH/Wxseccheck/Config/App.php,/APPSPATH/Wxseccheck/Config/Version.php
